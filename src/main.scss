@@ -1,0 +1,31 @@
+@import 'variables.scss';
+
+$font-stack: Helvetica, sans-serif;
+$primary-color: #333;
+$unused-color: #666;
+
+body {
+    font: 100% $font-stack;
+    color: $primary-color;
+    //background-color: antiquewhite;
+    border-color: $color-green;
+
+    // remove unnecessary prefix
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+
+    // add necessary prefix
+    user-select: none;
+
+    //background: url('./assets/logo.png') no-repeat center;
+    background-image: url('./assets/dice.svg');
+}
+
+.test {
+    color: $unused-color;
+}
+
+.pure-button {
+    -webkit-border-radius: 1em;
+    border-radius: 1em;
+}
