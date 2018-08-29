@@ -7,6 +7,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const cssnano = require('cssnano');
+const path = require('path');
+
+const PATHS = {
+    app: path.join(__dirname, 'src')
+};
 
 exports.devServer = ({host, port} = {}) => ({
     devServer: {
@@ -118,6 +123,18 @@ exports.loadJavascript = ({include, exclude} = {}) => ({
                 include,
                 exclude: /node_modules/,
                 use: 'babel-loader'
+            }
+        ]
+    }
+});
+
+exports.loadTypescript = () => ({
+    module: {
+        rules: [
+            {
+                test: /\.tsx?$/,
+                loader: 'awesome-typescript-loader',
+                exclude: ['/node_modules/', `${PATHS.app}/src/components/App/__tests__/*.tsx`]
             }
         ]
     }

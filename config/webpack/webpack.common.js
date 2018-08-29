@@ -12,5 +12,6 @@ module.exports = merge([
             })
         ]
     },
+    parts.loadTypescript(),
     parts.loadJavascript()
 ]);

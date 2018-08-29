@@ -1,0 +1,22 @@
+{
+    "transform": {
+        "^.+\\.(js|jsx)$": "<rootDir>/node_modules/babel-jest",
+        "^.+\\.(scss|css)$": "<rootDir>/config/jest/cssTransform.js",
+        "^(?!.*\\.(js|jsx|css|scss|json)$)": "<rootDir>/config/jest/fileTransform.js",
+        "^.+\\.(ts|tsx)$": "<rootDir>/test-preprocessor.js"
+    },
+    "transformIgnorePatterns": [
+        "node_modules/(?!(react-native|my-project|react-native-button)/)"
+    ],
+    "setupFiles": [
+        "<rootDir>/config/jest/test-shim.js",
+        "<rootDir>/config/jest/test-setup.js"
+    ],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "testMatch": ["**/__tests__/*.(ts|tsx|js)"],
+    "collectCoverageFrom": [
+        "src/**/**/*.tsx",
+        "src/**/**/*.js",
+        "!src/**/index.tsx"
+    ]
+}
