@@ -3,6 +3,10 @@ const PurifyCSSPlugin = require('purifycss-webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const UglifyWebpackPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const cssnano = require('cssnano');
 
 exports.devServer = ({host, port} = {}) => ({
     devServer: {
@@ -30,7 +34,7 @@ exports.loadCSS = ({include, exclude} = {}) => ({
 exports.extractCSS = ({include, exclude, use = []}) => {
     // Output extracted CSS to a file
     const plugin = new MiniCssExtractPlugin({
-        filename: '[name].css'
+        filename: '[name].[contenthash:4].css'
     });
 
     return {
@@ -112,7 +116,7 @@ exports.loadJavascript = ({include, exclude} = {}) => ({
             {
                 test: /\.js$/,
                 include,
-                exclude,
+                exclude: /node_modules/,
                 use: 'babel-loader'
             }
         ]
@@ -131,6 +135,26 @@ exports.attachRevision = () => ({
     plugins: [
         new webpack.BannerPlugin({
             banner: new GitRevisionPlugin().version()
+        })
+    ]
+});
+
+exports.copyFiles = ({patterns, options} = {}) => ({
+    plugins: [new CopyWebpackPlugin(...patterns, options)]
+});
+
+exports.minifyJavascript = () => ({
+    optimization: {
+        minimizer: [new UglifyWebpackPlugin({sourceMap: true})]
+    }
+});
+
+exports.minifyCSS = ({options}) => ({
+    plugins: [
+        new OptimizeCSSAssetsPlugin({
+            cssProcessor: cssnano,
+            cssProcessorOptions: options,
+            canPrint: false
         })
     ]
 });

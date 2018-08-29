@@ -10,7 +10,24 @@ const PATHS = {
 };
 
 module.exports = merge([
+    {
+        output: {
+            chunkFilename: '[name].[chunkhash:4].js',
+            filename: '[name].[chunkhash:4].js'
+        }
+    },
     parts.clean(PATHS.build),
+    parts.minifyJavascript(),
+    parts.minifyCSS({
+        options: {
+            discardComments: {
+                removeAll: true
+            }
+            // Run cssnano in safe mode to avoid
+            // potentially unsafe transformations.
+            // safe: true
+        }
+    }),
     parts.extractCSS({
         use: ['css-loader', 'sass-loader', parts.autoprefix()]
     }),
@@ -20,7 +37,7 @@ module.exports = merge([
     parts.loadImages({
         options: {
             limit: 15000,
-            name: 'assets/images/[name].[hash].[ext]'
+            name: 'assets/images/[name].[hash:4].[ext]'
         }
     }),
     parts.loadSVG({
