@@ -4,14 +4,14 @@ export default (text = 'Hello world') => {
     element.className = 'test';
     element.id = 'test';
 
-    // element.onclick = () =>
-    //     import('./lazy')
-    //         .then(lazy => {
-    //             element.textContent = lazy.default;
-    //         })
-    //         .catch(err => {
-    //             console.error(err);
-    //         });
+    element.onclick = () =>
+        import('./lazy')
+            .then(lazy => {
+                element.textContent = lazy.default;
+            })
+            .catch(err => {
+                console.error(err);
+            });
 
     return element;
 };

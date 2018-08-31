@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import {createLogger} from 'redux-logger';
