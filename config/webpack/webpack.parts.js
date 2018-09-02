@@ -10,36 +10,36 @@ const cssnano = require('cssnano');
 const path = require('path');
 
 const PATHS = {
-    app: path.join(__dirname, 'src')
+    app: path.join(__dirname, 'src'),
 };
 
-exports.devServer = ({host, port} = {}) => ({
+exports.devServer = ({ host, port } = {}) => ({
     devServer: {
         stats: 'errors-only',
         host, // Defaults to `localhost`
         port, // Defaults to 8080
         open: true,
-        overlay: true
-    }
+        overlay: true,
+    },
 });
 
-exports.loadCSS = ({include, exclude} = {}) => ({
+exports.loadCSS = ({ include, exclude } = {}) => ({
     module: {
         rules: [
             {
-                test: /\.scss$/,
+                test: /\.(css|scss)$/,
                 include,
                 exclude,
-                use: ['style-loader', 'css-loader', 'sass-loader']
-            }
-        ]
-    }
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+            },
+        ],
+    },
 });
 
-exports.extractCSS = ({include, exclude, use = []}) => {
+exports.extractCSS = ({ include, exclude, use = [] }) => {
     // Output extracted CSS to a file
     const plugin = new MiniCssExtractPlugin({
-        filename: '[name].[contenthash:4].css'
+        filename: '[name].[contenthash:4].css',
     });
 
     return {
@@ -50,26 +50,26 @@ exports.extractCSS = ({include, exclude, use = []}) => {
                     include,
                     exclude,
 
-                    use: [MiniCssExtractPlugin.loader].concat(use)
-                }
-            ]
+                    use: [MiniCssExtractPlugin.loader].concat(use),
+                },
+            ],
         },
-        plugins: [plugin]
+        plugins: [plugin],
     };
 };
 
-exports.purifyCSS = ({paths}) => ({
-    plugins: [new PurifyCSSPlugin({paths})]
+exports.purifyCSS = ({ paths }) => ({
+    plugins: [new PurifyCSSPlugin({ paths })],
 });
 
 exports.autoprefix = () => ({
     loader: 'postcss-loader',
     options: {
-        plugins: () => [require('autoprefixer')]
-    }
+        plugins: () => [require('autoprefixer')],
+    },
 });
 
-exports.loadImages = ({include, exclude, options} = {}) => ({
+exports.loadImages = ({ include, exclude, options } = {}) => ({
     module: {
         rules: [
             {
@@ -78,28 +78,28 @@ exports.loadImages = ({include, exclude, options} = {}) => ({
                 exclude,
                 use: {
                     loader: 'url-loader',
-                    options
-                }
-            }
-        ]
-    }
+                    options,
+                },
+            },
+        ],
+    },
 });
 
-exports.loadSVG = ({include, exclude, options} = {}) => ({
+exports.loadSVG = ({ include, exclude, options } = {}) => ({
     module: {
         rules: [
             {
                 test: /\.svg$/,
                 use: {
                     loader: 'file-loader',
-                    options
-                }
-            }
-        ]
-    }
+                    options,
+                },
+            },
+        ],
+    },
 });
 
-exports.loadFont = ({include, exclude, options} = {}) => ({
+exports.loadFont = ({ include, exclude, options } = {}) => ({
     module: {
         rules: [
             {
@@ -107,25 +107,25 @@ exports.loadFont = ({include, exclude, options} = {}) => ({
                 use: {
                     loader: 'file-loader',
                     options: {
-                        name: 'fonts/[name].[ext]'
-                    }
-                }
-            }
-        ]
-    }
+                        name: 'fonts/[name].[ext]',
+                    },
+                },
+            },
+        ],
+    },
 });
 
-exports.loadJavascript = ({include, exclude} = {}) => ({
+exports.loadJavascript = ({ include, exclude } = {}) => ({
     module: {
         rules: [
             {
                 test: /\.js$/,
                 include,
                 exclude: /node_modules/,
-                use: 'babel-loader'
-            }
-        ]
-    }
+                use: 'babel-loader',
+            },
+        ],
+    },
 });
 
 exports.loadTypescript = () => ({
@@ -134,44 +134,71 @@ exports.loadTypescript = () => ({
             {
                 test: /\.tsx?$/,
                 loader: 'awesome-typescript-loader',
-                exclude: ['/node_modules/', `${PATHS.app}/src/components/App/__tests__/*.tsx`]
-            }
-        ]
-    }
+                exclude: [
+                    '/node_modules/',
+                    `${PATHS.app}/src/components/App/__tests__/*.tsx`,
+                ],
+            },
+        ],
+    },
 });
 
-exports.generateSourceMap = ({type}) => ({
-    devtool: type
+exports.generateSourceMap = ({ type }) => ({
+    devtool: type,
 });
 
 exports.clean = path => ({
-    plugins: [new CleanWebpackPlugin(path)]
+    plugins: [new CleanWebpackPlugin(path)],
 });
 
 exports.attachRevision = () => ({
     plugins: [
         new webpack.BannerPlugin({
-            banner: new GitRevisionPlugin().version()
-        })
-    ]
+            banner: new GitRevisionPlugin().version(),
+        }),
+    ],
 });
 
-exports.copyFiles = ({patterns, options} = {}) => ({
-    plugins: [new CopyWebpackPlugin(...patterns, options)]
+exports.copyFiles = ({ patterns, options } = {}) => ({
+    plugins: [new CopyWebpackPlugin(...patterns, options)],
 });
 
 exports.minifyJavascript = () => ({
     optimization: {
-        minimizer: [new UglifyWebpackPlugin({sourceMap: true})]
-    }
+        minimizer: [new UglifyWebpackPlugin({ sourceMap: true })],
+    },
 });
 
-exports.minifyCSS = ({options}) => ({
+exports.minifyCSS = ({ options }) => ({
     plugins: [
         new OptimizeCSSAssetsPlugin({
             cssProcessor: cssnano,
             cssProcessorOptions: options,
-            canPrint: false
-        })
-    ]
+            canPrint: false,
+        }),
+    ],
 });
+
+exports.setFreeVariable = (key, value) => {
+    return {
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    key: JSON.stringify(value),
+                },
+            }),
+        ],
+    };
+};
+
+exports.passEnvironmentalVariable = () => {
+    return {
+        plugins: [
+            new webpack.DefinePlugin({
+                'process.env': {
+                    BUILD_VARIANT: JSON.stringify(process.env.BUILD_VARIANT),
+                },
+            }),
+        ],
+    };
+};

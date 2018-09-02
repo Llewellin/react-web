@@ -6,9 +6,9 @@ const productionConfig = require('./webpack.production');
 
 module.exports = mode => {
     console.log('mode = ', mode);
-    if (mode === 'production') {
-        return merge(commonConfig, productionConfig, {mode});
+    if (mode === 'prod') {
+        return merge(commonConfig, productionConfig, { mode });
     }
 
-    return merge(commonConfig, developmentConfig, {mode});
+    return merge(commonConfig, developmentConfig, { mode });
 };

@@ -1,0 +1,65 @@
+#carousel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    padding: 1rem;
+    width: 100%;
+    height: 168px !important;
+    background: #222222;
+}
+
+.carousel-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.score {
+    font-size: 1.5rem;
+    padding: 0.3rem;
+    color: #fec800;
+}
+
+.name-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0.1rem;
+}
+.icon {
+    width: auto;
+    height: auto;
+    padding-right: 0.1rem;
+}
+.name {
+    color: white;
+    font-size: 1rem;
+    padding-left: 0.1rem;
+}
+
+.date {
+    color: #999999;
+}
+
+.bet-container {
+}
+.bet {
+    margin-top: 1rem;
+    padding: 0.4em 0.8rem;
+    margin-bottom: 1rem;
+    border-width: 0rem;
+    border-radius: 5px;
+    background-color: #3aaa35;
+    color: white;
+    font-size: 1rem;
+}
+
+.slider-list {
+    height: 168px !important;
+}
+
+.err-msg {
+    color: white
+}

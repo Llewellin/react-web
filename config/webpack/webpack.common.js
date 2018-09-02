@@ -1,16 +1,11 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
-const path = require('path');
 
 const parts = require('./webpack.parts');
 
-const PATHS = {
-    app: path.join(__dirname, 'src'),
-};
-
 module.exports = merge([
     {
-        entry: `./src/index.tsx`,
+        entry: `./src/index.js`,
         resolve: {
             extensions: ['.js', '.json', '.ts', '.tsx'],
         },
@@ -20,7 +15,11 @@ module.exports = merge([
                 filename: './index.html',
             }),
         ],
+        // hide webpack warnings - There are multiple modules with names that only differ in casing.
+        // This warning make no sense
+        stats: 'errors-only',
     },
-    parts.loadTypescript(),
+    // parts.loadTypescript(),
     parts.loadJavascript(),
+    parts.passEnvironmentalVariable(),
 ]);
